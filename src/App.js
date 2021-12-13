@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { BrowserRouter, NavLink } from 'react-router-dom';
+import { BrowserRouter, NavLink, Switch, Route } from 'react-router-dom';
 
 import CharacterList from './components/Characters/CharacterList';
 import FilmList from './components/Films/FilmList';
@@ -10,7 +10,7 @@ function App() {
   const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
-    getFilms();
+    getFilms(films);
     getCharacters();
   }, []);
 
@@ -27,7 +27,15 @@ function App() {
 
     // 3. Set the resulting transformation as state using setFilms
     // 4. You'll know it works if the films show up on the page
-    return [];
+    const resp = await fetch('https://the-one-api.dev/v2/movie/', {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+    });
+    const data = await resp.json();
+    const munge = data.docs.map((item) => [item.name, item.name.toLowerCase(), item.name]);
+    console.log(munge);
+    setFilms(data.docs);
   };
 
   const getCharacters = async () => {
@@ -57,7 +65,14 @@ function App() {
             Characters
           </NavLink>
         </header>
-        {/* ADD YOUR ROUTES HERE */}
+        <Switch>
+          <Route exact path="/">
+            <FilmList films={films} />
+          </Route>
+          {/* <Route path="/characters">
+            <Characters characters={characters} setCharacters={setCharacters} />
+          </Route> */}
+        </Switch>
       </BrowserRouter>
     </div>
   );
