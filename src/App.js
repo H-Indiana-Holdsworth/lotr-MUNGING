@@ -28,7 +28,6 @@ function App() {
       setFilms(munge);
     };
     getFilms();
-    console.log(getFilms);
 
     const getCharacters = async () => {
       const resp = await fetch(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/characters`, {
