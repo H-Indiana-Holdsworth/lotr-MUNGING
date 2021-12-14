@@ -24,8 +24,12 @@ function App() {
         item.box_office_total,
         item.academy_award_nominations,
       ]);
+
       setFilms(munge);
     };
+    getFilms();
+    console.log(getFilms);
+
     const getCharacters = async () => {
       const resp = await fetch(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/characters`, {
         headers: {
@@ -45,7 +49,6 @@ function App() {
       setCharacters(munge);
     };
 
-    getFilms();
     getCharacters();
   }, []);
 
@@ -61,10 +64,10 @@ function App() {
           </NavLink>
         </header>
         <Switch>
-          <Route exact path="/films">
+          <Route exact path="/">
             <FilmList films={films} />
           </Route>
-          <Route path="/characters">
+          <Route exact path="/characters">
             <CharacterList characters={characters} />
           </Route>
         </Switch>
